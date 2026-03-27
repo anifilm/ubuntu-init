@@ -1,0 +1,55 @@
+# ===== Ubuntu Init 설정 파일 =====
+# AGENT.md를 참고하여 원하는 구성으로 수정하세요
+
+server:
+  hostname: my-ubuntu-server
+  timezone: Asia/Seoul
+
+packages:
+  apt:
+    - curl
+    - wget
+    - git
+    - unzip
+    - zsh
+    - golang
+  snap: []
+  pip: []
+
+services:
+  enable: []
+  start: []
+
+firewall:
+  default_input: deny
+  default_output: allow
+  rules: []
+
+users: []
+
+directories: []
+
+commands:
+  # Kotlin 설치 (JetBrains 공식 APT 리포지토리)
+  - curl -fsSL https://apt.jetbrains.com/jetbrains-ppa-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/jetbrains-ppa-keyring.gpg
+  - 'echo "deb [signed-by=/usr/share/keyrings/jetbrains-ppa-keyring.gpg] https://apt.jetbrains.com/jetbrains all main" > /etc/apt/sources.list.d/jetbrains.list'
+  - apt-get update -qq && apt-get install -y -qq kotlin
+  # zsh + oh-my-zsh
+  - chsh -s /bin/zsh $USER
+  - 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+  # Rust (rustup)
+  - 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
+  # Node.js (nvm)
+  - 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
+  - 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && nvm install --lts'
+  # Bun
+  - 'curl -fsSL https://bun.com/install | bash'
+  # Anaconda (무설치 모드)
+  - 'wget -q https://repo.anaconda.com/archive/Anaconda3-2025.06-0-Linux-x86_64.sh -O /tmp/anaconda.sh'
+  - 'bash /tmp/anaconda.sh -b -p $HOME/anaconda3 && rm /tmp/anaconda.sh'
+  # uv (Python 패키지 매니저)
+  - 'curl -LsSf https://astral.sh/uv/install.sh | sh'
+  # Deno
+  - 'curl -fsSL https://deno.land/install.sh | sh'
+
+files: []

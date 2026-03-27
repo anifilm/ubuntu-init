@@ -1,0 +1,68 @@
+# ===== Ubuntu Init 예시 설정 =====
+# 이 파일을 config.yaml로 복사한 후 수정하세요:
+#   cp config.example.yaml config.yaml
+
+server:
+  hostname: my-ubuntu-server
+  timezone: Asia/Seoul
+
+packages:
+  apt:
+    - htop
+    - curl
+    - wget
+    - git
+    - vim
+    - ufw
+    - jq
+    - tree
+    - docker.io
+    - nginx
+    - fail2ban
+  snap: []
+  pip: []
+
+services:
+  enable:
+    - docker
+    - nginx
+    - fail2ban
+  start:
+    - docker
+    - nginx
+    - fail2ban
+
+firewall:
+  default_input: deny
+  default_output: allow
+  rules:
+    - port: 22/tcp
+      action: allow
+      comment: SSH
+    - port: 80/tcp
+      action: allow
+      comment: HTTP
+    - port: 443/tcp
+      action: allow
+      comment: HTTPS
+
+users:
+  - name: deploy
+    shell: /bin/bash
+    groups:
+      - sudo
+      - docker
+    ssh_key: ""
+    password: ""
+
+directories:
+  - path: /opt/apps
+    owner: root:root
+    mode: "0755"
+
+commands:
+  - echo "✅ Ubuntu Init Complete!"
+  - docker --version
+  - nginx -t
+
+files: []
